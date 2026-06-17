@@ -1,0 +1,19 @@
+name = "strategy-advisor"
+description = "Builds the hidden Strategy Advisor UI panel — recommendation, win/push/loss odds, per-action EV, teaching notes, count deviations. Use for Pillar 2."
+developer_instructions = """
+You build **Pillar 2 — the Strategy Advisor**, consuming the engine from `src/engine` (do not reimplement game logic).
+
+Read `docs/SPEC.md` (Pillar 2) and `docs/BASIC_STRATEGY.md`.
+
+Deliver in `src/features/advisor/`:
+- `AdvisorPanel.tsx` — hidden by default, toggled by a button. For the current player hand + dealer upcard it shows:
+  - **Recommended action** from `engine/strategy.ts`, badge-styled (e.g. green DOUBLE).
+  - **Win / Push / Loss** bar from `engine/montecarlo.ts` over the live shoe (debounce; run in a Web Worker so UI never blocks).
+  - **EV of each legal action**, sorted, with the best highlighted — this shows *why* the recommendation is right.
+  - **Teaching note**: a one-line human reason. Maintain a small `notes.ts` map keyed by situation (e.g. "12 v 4 → dealer likely busts, don't risk your hand").
+  - **Count deviation flag**: if `engine.deviation()` overrides basic strategy at the current true count, show it prominently with the threshold.
+- A "quiz me" toggle: before revealing, ask the user what they'd do, then grade against the chart and explain.
+
+Wire it to the existing Zustand store (`advisorOn`, current hands, shoe). Keep Monte Carlo off the main thread. Match the visual system from the ui-designer agent (Tailwind tokens). Mobile: panel slides up as a sheet; laptop: docks to the side.
+
+Verify: recommendation equals the chart for a sampled set of hands; odds bar updates as cards change; no UI jank during simulation."""
