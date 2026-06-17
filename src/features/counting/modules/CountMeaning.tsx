@@ -45,10 +45,14 @@ export function buildDeviationPrompts(): DeviationPrompt[] {
 const BET_RAMP_TCS = [-2, -1, 0, 1, 2, 3, 4, 5]
 
 const EDGE_TABLE = [
-  { tc: -2, edge: '+1.0%', who: 'house' },
-  { tc: 0,  edge: '+0.5%', who: 'house' },
-  { tc: 2,  edge: '+0.5%', who: 'player' },
-  { tc: 4,  edge: '+1.5%', who: 'player' },
+  { tc: -2, edge: '-0.5%', who: 'house', action: 'Bet minimum, consider walking' },
+  { tc: -1, edge: '0%',    who: 'house', action: 'Bet minimum only' },
+  { tc:  0, edge: '+0.5%', who: 'house', action: 'Bet minimum (neutral)' },
+  { tc:  1, edge: '+0.5%', who: 'house', action: 'Bet minimum (still cautious)' },
+  { tc:  2, edge: '+1.0%', who: 'player', action: 'Raise bet to 2 units' },
+  { tc:  3, edge: '+1.5%', who: 'player', action: 'Raise to 4 units, consider deviations' },
+  { tc:  4, edge: '+2.0%', who: 'player', action: 'Raise to 8 units, apply I18 plays' },
+  { tc:  5, edge: '+2.5%', who: 'player', action: 'Max bet 12 units, full deviations' },
 ]
 
 export function CountMeaning() {
@@ -72,7 +76,7 @@ export function CountMeaning() {
           still holds ~0.5% against basic strategy. Formula:
         </p>
         <div className="bg-black/40 rounded-lg px-3 py-2 text-center font-mono text-yellow-300 text-sm mb-4">
-          edge ≈ TC × 0.5%
+          edge ≈ (TC × 0.5%) − 0.5%
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -81,6 +85,7 @@ export function CountMeaning() {
                 <th className="text-left pb-2">True Count</th>
                 <th className="text-left pb-2">Edge</th>
                 <th className="text-left pb-2">Favors</th>
+                <th className="text-left pb-2">What to Do</th>
               </tr>
             </thead>
             <tbody>
@@ -93,6 +98,7 @@ export function CountMeaning() {
                   <td className={`py-1.5 font-medium ${row.who === 'player' ? 'text-green-400' : 'text-red-400'}`}>
                     {row.who === 'player' ? 'Player' : 'House'}
                   </td>
+                  <td className="py-1.5 text-white/80">{row.action}</td>
                 </tr>
               ))}
             </tbody>
@@ -134,6 +140,31 @@ export function CountMeaning() {
               })}
             </tbody>
           </table>
+        </div>
+
+        <div className="mt-4 bg-yellow-400/10 border border-yellow-400/30 rounded-lg p-3">
+          <p className="text-yellow-300 text-xs font-bold uppercase tracking-wide mb-2">Bankroll sizing formula</p>
+          <p className="text-white/70 text-sm leading-relaxed">
+            Size your <strong className="text-white">1 unit</strong> as <strong className="text-yellow-300">1/200 of your total bankroll</strong> (conservative).
+            This keeps your risk of ruin below 5% over a long session.
+          </p>
+          <div className="mt-3 space-y-1 text-sm">
+            <div className="flex justify-between">
+              <span className="text-white/50">$1,000 bankroll</span>
+              <span className="text-white">1 unit = $5 · max bet (TC+5) = $60</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-white/50">$5,000 bankroll</span>
+              <span className="text-white">1 unit = $25 · max bet (TC+5) = $300</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-white/50">$10,000 bankroll</span>
+              <span className="text-white">1 unit = $50 · max bet (TC+5) = $600</span>
+            </div>
+          </div>
+          <p className="text-white/40 text-xs mt-3">
+            Kelly criterion simplified: optimal bet% ≈ edge ÷ 1 (since blackjack pays ~1:1). At TC+4 (+2% edge), Kelly says bet 2% of bankroll = 4 units if 1u = 0.5% of bankroll.
+          </p>
         </div>
       </div>
 

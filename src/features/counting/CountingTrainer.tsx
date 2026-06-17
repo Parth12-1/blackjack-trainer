@@ -101,7 +101,7 @@ export function CountingTrainer() {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto px-4 pb-8 max-w-2xl mx-auto w-full">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 pb-8 max-w-2xl mx-auto w-full">
         {activeTab === 'basics' && (
           <Basics progress={progress} onProgress={handleProgress} />
         )}
