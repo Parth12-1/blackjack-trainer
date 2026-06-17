@@ -169,3 +169,19 @@ export function getAllActiveDeviations(
       condition: rule.condition,
     }))
 }
+
+export function getDeviationRulesSummary(): Array<{
+  id: number
+  description: string
+  action: Deviation['action']
+  threshold: number
+  condition: 'gte' | 'lte'
+}> {
+  return DEVIATION_RULES.map(r => ({
+    id: r.id,
+    description: r.description,
+    action: r.action,
+    threshold: r.threshold,
+    condition: r.condition,
+  }))
+}

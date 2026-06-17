@@ -4,6 +4,7 @@ import { Basics } from './modules/Basics'
 import { Tutorial } from './modules/Tutorial'
 import { SpeedDrill } from './modules/SpeedDrill'
 import { LiveHelper } from './modules/LiveHelper'
+import { CountMeaning } from './modules/CountMeaning'
 import {
   loadProgress,
   saveProgress,
@@ -12,13 +13,14 @@ import {
 } from './progress'
 import type { CountingProgress } from './progress'
 
-type TrainerTab = 'basics' | 'tutorial' | 'speed' | 'live'
+type TrainerTab = 'basics' | 'tutorial' | 'speed' | 'live' | 'meaning'
 
 const TABS: { id: TrainerTab; label: string }[] = [
   { id: 'basics', label: 'Basics' },
   { id: 'tutorial', label: 'Tutorial' },
   { id: 'speed', label: 'Speed Drill' },
   { id: 'live', label: 'Live Helper' },
+  { id: 'meaning', label: 'Count Meaning' },
 ]
 
 export function CountingTrainer() {
@@ -115,6 +117,7 @@ export function CountingTrainer() {
         {activeTab === 'live' && (
           <LiveHelper progress={progress} onProgress={handleProgress} />
         )}
+        {activeTab === 'meaning' && <CountMeaning />}
       </div>
     </div>
   )

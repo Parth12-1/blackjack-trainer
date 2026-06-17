@@ -10,6 +10,7 @@ import { AdvisorPanel } from '../advisor/AdvisorPanel'
 import { CountHelperPanel } from '../counting/CountHelperPanel'
 import { DecisionSummary, DecisionToast } from './DecisionFeedback'
 import { SettingsModal } from './SettingsModal'
+import { ExpectedPayout } from './ExpectedPayout'
 import type { Hand } from '../../types/game'
 import type { Card } from '../../engine/cards'
 
@@ -92,8 +93,10 @@ export function PlayTable() {
   const activeHandIndex = useGameStore(s => s.activeHandIndex)
   const advisorOn = useGameStore(s => s.advisorOn)
   const countHelperOn = useGameStore(s => s.countHelperOn)
+  const expectedPayoutOn = useGameStore(s => s.expectedPayoutOn)
   const toggleAdvisor = useGameStore(s => s.toggleAdvisor)
   const toggleCountHelper = useGameStore(s => s.toggleCountHelper)
+  const toggleExpectedPayout = useGameStore(s => s.toggleExpectedPayout)
   const resetBankroll = useGameStore(s => s.resetBankroll)
   const updateSettings = useGameStore(s => s.updateSettings)
   const settings = useGameStore(s => s.settings)
@@ -219,6 +222,7 @@ export function PlayTable() {
 
             {/* Bet / actions */}
             <div className="w-full bg-black/25 rounded-2xl p-4 flex flex-col items-center gap-4 border border-white/10 md:gap-3 md:p-3">
+              <ExpectedPayout />
               {(phase === 'idle' || phase === 'betting') && <ChipSelector />}
               <ActionButtons />
             </div>
@@ -258,6 +262,12 @@ export function PlayTable() {
           className={`px-3 py-1.5 rounded-lg transition-all font-medium ${countHelperOn ? 'bg-blue-500 text-white' : 'bg-white/10 text-white/70 hover:text-white hover:bg-white/20'}`}
         >
           {countHelperOn ? '✓ Count Helper' : 'Count Helper'}
+        </button>
+        <button
+          onClick={toggleExpectedPayout}
+          className={`px-3 py-1.5 rounded-lg transition-all font-medium ${expectedPayoutOn ? 'bg-green-500 text-white' : 'bg-white/10 text-white/70 hover:text-white hover:bg-white/20'}`}
+        >
+          {expectedPayoutOn ? '✓ EV' : 'EV'}
         </button>
         <button
           onClick={() => setSettingsOpen(true)}

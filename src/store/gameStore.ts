@@ -86,6 +86,7 @@ export interface GameState {
   stats: Stats
   advisorOn: boolean
   countHelperOn: boolean
+  expectedPayoutOn: boolean
   decisionFeedback: DecisionFeedback[]
   latestDecisionFeedback: DecisionFeedback | null
   isDealing: boolean
@@ -104,6 +105,7 @@ export interface GameState {
   resetBankroll(): void
   toggleAdvisor(): void
   toggleCountHelper(): void
+  toggleExpectedPayout(): void
   updateSettings(s: Partial<Settings>): void
   dismissDecisionFeedback(): void
   finishInitialDeal(): void
@@ -232,6 +234,7 @@ export const useGameStore = create<GameState>()(
         stats: DEFAULT_STATS,
         advisorOn: false,
         countHelperOn: false,
+        expectedPayoutOn: false,
         decisionFeedback: [],
         latestDecisionFeedback: null,
         isDealing: false,
@@ -355,6 +358,7 @@ export const useGameStore = create<GameState>()(
         resetBankroll: () => set({ bankroll: 1000, stats: DEFAULT_STATS }),
         toggleAdvisor: () => set(s => ({ advisorOn: !s.advisorOn })),
         toggleCountHelper: () => set(s => ({ countHelperOn: !s.countHelperOn })),
+        toggleExpectedPayout: () => set(s => ({ expectedPayoutOn: !s.expectedPayoutOn })),
         updateSettings: (s) => set(state => ({ settings: { ...state.settings, ...s } })),
         dismissDecisionFeedback: () => set({ latestDecisionFeedback: null }),
         finishInitialDeal: () => {
