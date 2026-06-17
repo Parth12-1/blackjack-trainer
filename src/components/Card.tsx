@@ -15,6 +15,31 @@ const SIZES = {
   lg: { w: 88, h: 124 },
 }
 
+function CardBack({ w, h }: { w: number; h: number }) {
+  const r = Math.min(w, h) * 0.1
+  return (
+    <g>
+      <rect width={w} height={h} rx={r} ry={r} fill="#1a237e" />
+      {/* Inner border */}
+      <rect x={w*0.06} y={w*0.06} width={w*0.88} height={h-w*0.12} rx={r*0.7} ry={r*0.7}
+        fill="none" stroke="#3949ab" strokeWidth={w*0.025} />
+      {/* Diagonal pattern */}
+      <defs>
+        <pattern id="cardPattern" patternUnits="userSpaceOnUse" width={w*0.15} height={w*0.15} patternTransform="rotate(45)">
+          <rect width={w*0.075} height={w*0.15} fill="#283593" />
+        </pattern>
+        <clipPath id={`cardClip-${w}`}>
+          <rect x={w*0.09} y={w*0.09} width={w*0.82} height={h-w*0.18} rx={r*0.5} ry={r*0.5} />
+        </clipPath>
+      </defs>
+      <rect x={w*0.09} y={w*0.09} width={w*0.82} height={h-w*0.18}
+        fill="url(#cardPattern)" clipPath={`url(#cardClip-${w})`} opacity={0.5} />
+      {/* Center diamond */}
+      <text x={w/2} y={h/2 + w*0.06} textAnchor="middle" fontSize={w*0.35} fill="#3949ab" opacity={0.7}>♦</text>
+    </g>
+  )
+}
+
 export function Card({ card, size = 'md', delay = 0, fromTop = false, fromSide }: Props) {
   const { w, h } = SIZES[size]
   const isRed = card.suit === '♥' || card.suit === '♦'
@@ -40,9 +65,7 @@ export function Card({ card, size = 'md', delay = 0, fromTop = false, fromSide }
     >
       {card.faceDown ? (
         <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ filter: 'drop-shadow(1px 3px 4px rgba(0,0,0,0.6))' }}>
-          <rect x={1} y={1} width={w - 2} height={h - 2} rx={5} fill="#1e3a5f" stroke="#3b82f6" strokeWidth={1.5} />
-          <rect x={4} y={4} width={w - 8} height={h - 8} rx={3} fill="none" stroke="#2563eb" strokeWidth={1} />
-          <text x={w / 2} y={h / 2 + 8} textAnchor="middle" fontSize={28} fill="#2563eb" opacity={0.4}>🂠</text>
+          <CardBack w={w} h={h} />
         </svg>
       ) : (
         <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ filter: 'drop-shadow(1px 3px 4px rgba(0,0,0,0.5))' }}>

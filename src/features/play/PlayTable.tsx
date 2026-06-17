@@ -156,7 +156,7 @@ export function PlayTable() {
   const panelPlaceholder = 'hidden lg:block'
 
   return (
-    <div className="min-h-screen flex flex-col md:h-full md:min-h-0 md:overflow-hidden" style={{ background: 'radial-gradient(ellipse at center, #1a5c38 0%, #0f3d26 100%)' }}>
+    <div className="min-h-screen flex flex-col md:h-full md:min-h-0 md:overflow-hidden felt-texture">
       <StatsBar />
 
       <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 md:py-3 lg:overflow-hidden">

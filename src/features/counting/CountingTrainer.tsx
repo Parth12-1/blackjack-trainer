@@ -39,10 +39,7 @@ export function CountingTrainer() {
   const belt = beltLevel(score)
 
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ background: 'radial-gradient(ellipse at center, #1a5c38 0%, #0f3d26 100%)' }}
-    >
+    <div className="min-h-screen flex flex-col felt-texture">
       {/* Header */}
       <div className="px-4 pt-5 pb-3 max-w-2xl mx-auto w-full">
         <div className="flex items-baseline justify-between mb-3">

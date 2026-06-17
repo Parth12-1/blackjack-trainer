@@ -5,14 +5,17 @@ interface BtnProps {
   label: string
   onClick: () => void
   disabled?: boolean
-  variant?: 'primary' | 'secondary' | 'danger'
+  variant?: 'primary' | 'hit' | 'stand' | 'double' | 'split' | 'surrender'
 }
 
-function Btn({ label, onClick, disabled, variant = 'secondary' }: BtnProps) {
+function Btn({ label, onClick, disabled, variant = 'stand' }: BtnProps) {
   const cls = {
     primary:   'bg-yellow-400 text-black hover:bg-yellow-300 font-bold',
-    secondary: 'bg-white/15 text-white hover:bg-white/25',
-    danger:    'bg-red-700 text-white hover:bg-red-600',
+    hit:       'bg-gradient-to-b from-emerald-500 to-emerald-700 text-white shadow-md hover:from-emerald-400 hover:to-emerald-600 active:scale-95 transition-all',
+    stand:     'bg-gradient-to-b from-slate-600 to-slate-800 text-white shadow-md hover:from-slate-500 hover:to-slate-700 active:scale-95 transition-all',
+    double:    'bg-gradient-to-b from-amber-500 to-amber-700 text-white shadow-md hover:from-amber-400 hover:to-amber-600 active:scale-95 transition-all',
+    split:     'bg-gradient-to-b from-purple-500 to-purple-700 text-white shadow-md hover:from-purple-400 hover:to-purple-600 active:scale-95 transition-all',
+    surrender: 'bg-gradient-to-b from-rose-600 to-rose-800 text-white shadow-md hover:from-rose-500 hover:to-rose-700 active:scale-95 transition-all',
   }[variant]
   return (
     <button
@@ -65,11 +68,11 @@ export function ActionButtons() {
 
   return (
     <div className="flex flex-wrap gap-2 justify-center">
-      <Btn label="Hit" onClick={hit} variant="primary" disabled={hv.bust || hv.total === 21} />
-      <Btn label="Stand" onClick={stand} variant="secondary" disabled={hv.bust} />
-      {canDbl && <Btn label="Double" onClick={double} variant="secondary" />}
-      {canSpl && <Btn label="Split" onClick={split} variant="secondary" />}
-      {canSrr && <Btn label="Surrender" onClick={surrender} variant="danger" />}
+      <Btn label="Hit" onClick={hit} variant="hit" disabled={hv.bust || hv.total === 21} />
+      <Btn label="Stand" onClick={stand} variant="stand" disabled={hv.bust} />
+      {canDbl && <Btn label="Double" onClick={double} variant="double" />}
+      {canSpl && <Btn label="Split" onClick={split} variant="split" />}
+      {canSrr && <Btn label="Surrender" onClick={surrender} variant="surrender" />}
     </div>
   )
 }
