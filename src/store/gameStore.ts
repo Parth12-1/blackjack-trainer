@@ -29,6 +29,8 @@ export interface DecisionFeedback {
   id: number
   handIndex: number
   situation: string
+  playerCards: Card[]
+  dealerUpcard: Card
   chosenAction: PlayerDecision
   chosenLabel: string
   recommendedAction: PlayerDecision
@@ -206,6 +208,8 @@ export const useGameStore = create<GameState>()(
           id: nextDecisionFeedbackId++,
           handIndex: st.activeHandIndex,
           situation: grade.situation,
+          playerCards: hand.cards.map(c => ({ ...c })),
+          dealerUpcard: { ...dealerUpcard },
           chosenAction,
           chosenLabel: grade.chosenLabel,
           recommendedAction: grade.action,

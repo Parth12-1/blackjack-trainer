@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { DecisionFeedback as DecisionFeedbackType } from '../../store/gameStore'
+import { getStrategyExplanation } from '../../engine/strategyFeedback'
 
 interface DecisionToastProps {
   feedback: DecisionFeedbackType | null
@@ -35,6 +37,11 @@ export function DecisionToast({ feedback, onDismiss }: DecisionToastProps) {
                 {feedback.situation}: you chose <strong>{feedback.chosenLabel}</strong>
                 {!feedback.correct && <>; chart says <strong>{feedback.recommendedLabel}</strong></>}
               </div>
+              {!feedback.correct && (
+                <p className="mt-1 text-xs text-white/50 leading-relaxed">
+                  {getStrategyExplanation(feedback.playerCards, feedback.dealerUpcard, feedback.recommendedAction, feedback.chosenAction).split('.')[0]}.
+                </p>
+              )}
             </div>
             <button
               onClick={onDismiss}
@@ -54,6 +61,7 @@ export function DecisionSummary({ decisions, onDismiss }: DecisionSummaryProps) 
   if (decisions.length === 0) return null
 
   const correct = decisions.filter(decision => decision.correct).length
+  const [expandedId, setExpandedId] = useState<number | null>(null)
 
   return (
     <motion.div
@@ -78,21 +86,40 @@ export function DecisionSummary({ decisions, onDismiss }: DecisionSummaryProps) 
 
       <div className="space-y-2">
         {decisions.map(decision => (
-          <div
-            key={decision.id}
-            className={`grid gap-2 rounded-lg px-3 py-2 text-sm sm:grid-cols-[1fr_auto_auto] ${
-              decision.correct ? 'bg-green-500/10' : 'bg-red-500/10'
-            }`}
-          >
-            <div className="font-medium text-white/80">
-              Hand {decision.handIndex + 1}: {decision.situation}
-            </div>
-            <div className="text-white/55">
-              You: <span className="font-semibold text-white/85">{decision.chosenLabel}</span>
-            </div>
-            <div className={decision.correct ? 'text-green-300' : 'text-red-300'}>
-              Chart: <span className="font-semibold">{decision.recommendedLabel}</span>
-            </div>
+          <div key={decision.id} className="rounded-lg overflow-hidden">
+            <button
+              onClick={() => setExpandedId(expandedId === decision.id ? null : decision.id)}
+              className={`w-full grid gap-2 px-3 py-2 text-sm text-left transition-colors sm:grid-cols-[1fr_auto_auto_auto] ${
+                decision.correct ? 'bg-green-500/10 hover:bg-green-500/15' : 'bg-red-500/10 hover:bg-red-500/15'
+              }`}
+            >
+              <div className="font-medium text-white/80">
+                Hand {decision.handIndex + 1}: {decision.situation}
+              </div>
+              <div className="text-white/55">
+                You: <span className="font-semibold text-white/85">{decision.chosenLabel}</span>
+              </div>
+              <div className={decision.correct ? 'text-green-300' : 'text-red-300'}>
+                Chart: <span className="font-semibold">{decision.recommendedLabel}</span>
+              </div>
+              <div className="text-white/30 text-xs self-center">
+                {expandedId === decision.id ? '▲' : '▼ Why?'}
+              </div>
+            </button>
+            {expandedId === decision.id && (
+              <div className={`px-3 pb-3 text-xs text-white/65 leading-relaxed border-t ${
+                decision.correct ? 'border-green-500/20 bg-green-500/5' : 'border-red-500/20 bg-red-500/5'
+              }`}>
+                <p className="pt-2">
+                  {getStrategyExplanation(
+                    decision.playerCards,
+                    decision.dealerUpcard,
+                    decision.recommendedAction,
+                    decision.chosenAction,
+                  )}
+                </p>
+              </div>
+            )}
           </div>
         ))}
       </div>
